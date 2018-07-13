@@ -7,7 +7,15 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableHighlight,
+  TouchableOpacity,
+} from 'react-native';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -17,13 +25,55 @@ const instructions = Platform.select({
 });
 
 type Props = {};
+
 export default class App extends Component<Props> {
+
+  constructor(){
+    super();
+    this.state = {
+      todos: [],
+      newTodo: '',
+    }
+  }
+
+  _handleChange(text){
+    this.setState({newTodo: text});
+  }
+
+  _handlePress(e){
+    e.preventDefault();
+    const todos = [...this.state.todos, this.state.newTodo];
+    this.setState({todos, newTodo: ''});
+  }
+
+  _removeTodo(index){
+    const todos = this.state.todos;
+    todos.splice(index, 1);
+    this.setState({todos});
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
+
+        <TextInput
+          value={this.state.newTodo}
+          onChangeText={this._handleChange.bind(this)}
+          placeholder='Name the Todo'
+        />
+
+        <TouchableOpacity onPress={this._handlePress.bind(this)}>
+          <Text>Add Todo</Text>
+        </TouchableOpacity>
+
+        {this.state.todos.map((todo, index) =>
+          <TouchableHighlight onPress={() => this._removeTodo.call(this, index)} key={index}>
+            <View>
+              <Text>{todo}</Text>
+            </View>
+          </TouchableHighlight>
+        )}
+
       </View>
     );
   }
