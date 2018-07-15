@@ -15,22 +15,14 @@ import {
   TextInput,
   TouchableHighlight,
   TouchableOpacity,
-  Switch,
 } from 'react-native';
+import { Reddit } from './src/Reddit'
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
-
-type Props = {};
 const url = 'http://localhost:3000/todos';
 
-export default class App extends Component<Props> {
+export default class App extends Component {
 
-  
+
 
   constructor() {
     super();
@@ -40,15 +32,16 @@ export default class App extends Component<Props> {
     }
   }
 
-  componentWillMount(){
+  componentWillMount() {
     fetch(url, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
-      }}
+      }
+    }
     )
-    .then(res => res.json())
-    .then(todos => this.setState({todos}))
+      .then(res => res.json())
+      .then(todos => this.setState({ todos }))
   }
 
   _handleChange(text) {
@@ -58,16 +51,16 @@ export default class App extends Component<Props> {
   _handlePress(e) {
     fetch(url, {
       method: 'post',
-      headers: {'Content-Type': 'application/json'},
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-          name: this.state.newTodo
-        })
+        name: this.state.newTodo
+      })
     })
-    .then(res => res.json())
-    .then(todo => {
-      const todos = [todo,...this.state.todos];
-      this.setState({ todos, newTodo: '' });
-    })
+      .then(res => res.json())
+      .then(todo => {
+        const todos = [todo, ...this.state.todos];
+        this.setState({ todos, newTodo: '' });
+      })
 
     // e.preventDefault();
     // const todos = [...this.state.todos, this.state.newTodo];
@@ -98,7 +91,7 @@ export default class App extends Component<Props> {
     return (
 
       <View style={styles.container}>
-      <Switch />
+        <Reddit />
         <View style={styles.form}>
 
           <TextInput
@@ -119,7 +112,7 @@ export default class App extends Component<Props> {
           {this.state.todos.map((todo, index) =>
             <TouchableHighlight onPress={() => this._removeTodo.call(this, index)} key={index}>
               <View style={styles.todo}>
-              <Text style={styles.todoText}>{todo.name}</Text>
+                <Text style={styles.todoText}>{todo.name}</Text>
               </View>
             </TouchableHighlight>
           )}
